@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Document</title>
+</head>
+<body>
+    
+    <canvas id="screen" style="border:10px solid #d3d3d3; background-color:#333">
+    </canvas> -->
+    <script>
+        var canvas = document.getElementById("screen");
+        var ctx = canvas.getContext("2d");
+        const gameWindowWidth = 1100;
+        const gameWindowHeight = 600;
+        const FPS = 60;
+        var dx ,dy ,bx ,by ,bs;
+        var paddleX,paddleY,paddleWidth,paddleHeight;
+
+        
+        const game = {
+            init: function(){
+                canvas.width = gameWindowWidth;
+                canvas.height = gameWindowHeight;
+                dx = 5;
+                dy = 4;
+                bx = gameWindowWidth/2;
+                by = gameWindowHeight/2;
+                bs = 20;
+                paddleX = gameWindowWidth/2;
+                paddleY = gameWindowHeight/1.1;
+                paddleWidth = 150;
+                paddleHeight = 20;
+            },
+
+            updateBall: function(){
+                    this.drawBall();
+                    bx += dx;
+                    by += dy;
+            },
+
+            drawBall: function(){
+                ctx.beginPath();   
+                ctx.arc(bx, by, bs, 0, 2 * Math.PI);
+                ctx.fillStyle = "red";
+                ctx.fill();
+                ctx.stroke();
+            },
+
+            drawBar: function(x){
+                ctx.beginPath(); 
+                ctx.fillStyle = "blue";
+                ctx.fillRect(paddleX, paddleY, paddleWidth, paddleHeight);
+            },
+
+            conclusion: function(){
+                if(bx + bs > gameWindowWidth || bx - bs < 0){
+                    dx = -dx;
+                }
+
+                if(by + bs > gameWindowHeight || by - bs < 0){
+                    dy = -dy;
+                }
+
+                if(bx > paddleX - bs && bx < paddleX + paddleWidth + bs && by > paddleY - bs && by < paddleY + paddleHeight + bs){ // kiem tra va cham voi paddle
+                    dy = -dy;
+                    // dx = -dx
+                }
+                
+            },
+
+            movement: function(){
+                document.addEventListener("mousemove",(e)=>{
+                    let target = e.screenX - paddleX/2;
+                    paddleX += (target - paddleX) * 0.1; 
+                    if(paddleX > gameWindowWidth - paddleWidth - bs){
+                        paddleX = gameWindowWidth - paddleWidth
+                    }
+                })
+            },
+
+            gameStart: function (){
+                this.init();
+                this.drawBall();
+                setInterval(()=>{
+                    ctx.clearRect(0,0,gameWindowWidth,gameWindowHeight);
+                    this.updateBall();
+                    this.conclusion();
+                    this.drawBar();
+                    this.movement();
+                },1000/FPS)
+            }
+        }
+
+        game.gameStart();
+    </script>
+
+    <!-- <script src="./index.js"></script> -->
+</body>
+</html>

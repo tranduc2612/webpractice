@@ -1,0 +1,14 @@
+{
+  "produces": [
+    {
+      "name": "danh sach 1",
+      "description": "mieu ta 1",
+      "id": 1
+    },
+    {
+      "name": "123",
+      "description": "12345",
+      "id": 2
+    }
+  ]
+}
